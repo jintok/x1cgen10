@@ -104,3 +104,26 @@ journalctl -b 0 | grep -E 'PM: suspend entry|Waking up from|suspend exit'
 | Overnight | 10h10m in deep S3 | 0 (lid only) | ~1% (71% -> 70%) |
 
 Expected long-term drain in suspend: roughly 1% per 10 hours (~2.5%/day).
+
+## References
+
+Note: this issue was diagnosed from on-machine logs; there is no official
+Ubuntu or Lenovo document describing it. The pages below are general Linux
+references - the mechanisms (kernel sleep modes, ACPI wakeup) are
+distro-agnostic, though the Arch Wiki pages use Arch-specific commands in
+places (e.g. mkinitcpio). They may be especially useful if switching to
+Arch Linux.
+
+- Kernel docs (official): System Sleep States
+  https://docs.kernel.org/admin-guide/pm/sleep-states.html
+  Documents `/sys/power/mem_sleep` and the `mem_sleep_default` kernel
+  parameter; notes that some ACPI systems default to `s2idle` even when
+  S3 ("deep") is supported.
+- Arch Wiki: Power management/Suspend and hibernate
+  https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate
+  "Changing suspend method" covers `mem_sleep_default=deep` and the
+  `MemorySleepMode=deep` option in systemd's sleep.conf.
+- Arch Wiki: Wakeup triggers
+  https://wiki.archlinux.org/title/Wakeup_triggers
+  Documents "instantaneous wakeup after suspending" and disabling ACPI
+  wake sources via `/proc/acpi/wakeup`.
